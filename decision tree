@@ -1,0 +1,43 @@
+# decision Tree
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+data=pd.read_csv('breast-cancer (1).csv')
+data.head()
+
+data.describe()
+
+data.isnull().sum()
+
+data = data.dropna(axis='columns')
+
+x=data.drop(["diagnosis"],axis=1)
+y=data.diagnosis.values
+
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,random_state=42)
+
+dt=DecisionTreeClassifier()
+dt.fit(x_train, y_train)
+dt.score(x_test,y_test)
+
+Y_pred = dt.predict(x_test)
+
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, Y_pred)
+print ("Confusion Matrix : \n", cm)
+
+from sklearn.metrics import accuracy_score
+print ("Accuracy : ", accuracy_score(y_test, Y_pred))
+
+# Plot confusion matrix
+import seaborn as sns
+import pandas as pd
+# confusion matrix sns heatmap 
+ax = plt.axes()
+df_cm = cm
+sns.heatmap(df_cm, annot=True, annot_kws={"size": 30}, fmt='d',cmap="Blues", ax = ax )
+ax.set_title('Confusion Matrix')
+plt.show()
